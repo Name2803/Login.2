@@ -44,7 +44,8 @@ namespace Reg
 
 		system("cls");
 		std::cout << "\n\n\n\n"
-			<< "====Registration was successful!====";
+			<< "====Registration was successful!===="
+			<< "\n\n\n\n";
 
 
 
