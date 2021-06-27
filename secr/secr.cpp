@@ -1,4 +1,5 @@
 #include "secr.h"
+#include "../server/server.h"
 
 #include <iostream>
 #include <fstream>
@@ -28,6 +29,7 @@ namespace Reg
 		std::cout << "\nStatus: ";
 		std::cin >> reg::status;
 
+		system("cls");
 		while (reg::login())
 		{
 			system("cls");
@@ -50,6 +52,8 @@ namespace Reg
 
 
 		reg::server();
+
+		data::data(reg::ID);
 	}
 
 	int reg::login()
@@ -61,25 +65,39 @@ namespace Reg
 		fin.open(path1);
 		if (fin.is_open())
 		{
-			fin >> reg::ID >> reg::inLog >> reg::inLog;
-
-			if (sizeof(reg::inLog) != sizeof(reg::log))
+			fin.seekg(0, std::ios::end);
+			if (fin.tellg() == 0)
 			{
-				std::cout << "\nRight\n";
+				reg::ID = 0;
 				return 0;
 			}
 			else
 			{
-				for (int i = 0; i < sizeof(reg::log) / 8 - 2; i++)
+				while (!fin.eof())
 				{
-					if (reg::inLog[i] != reg::log[i])
+					fin >> reg::ID >> reg::inLog >> reg::inLog;
+
+					std::cout << reg::ID << "  " << reg::inLog << "\n";
+
+					if (sizeof(reg::inLog) != sizeof(reg::log))
 					{
 						std::cout << "\nRight\n";
-						return 0;
+						continue;
+					}
+					else
+					{
+						for (int i = 0; i < (sizeof(reg::log) / 8 - 1); i++)
+						{
+							if (reg::inLog[i] == reg::log[i])
+								if (i == sizeof(reg::log) / 8 - 2)
+									return 1;
+							else
+								break;
+						}
 					}
 				}
-				return 1;
 			}
+
 		}
 		else
 		{

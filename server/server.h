@@ -11,8 +11,8 @@ private:
 	int ID;
 	std::string tamp;
 
-	const std::string path1 = "lpdata.txt";
-	const std::string path2 = "data.txt";
-	void showData(const int outID);
-	void func1(const int fff);
+	const std::string path1 = "../server/lpdata.txt";
+	const std::string path2 = "../server/data.txt";
+	void searchData(const int outID);
+	void showData();
 };
