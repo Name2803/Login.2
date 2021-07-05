@@ -5,20 +5,21 @@
 #include <fstream>
 #include <cstdlib>
 
-#define DEBUG
+//#define DEBUG
 
 namespace Reg
 {
-
 	reg::reg()
 	{
-		reg::funk1();
+#ifndef DEBUG
+		system("cls");
+#endif // !DEBUG
+		funk1();
 	}
+
 	void reg::funk1()
 	{
-		system("cls");
-		std::cout << "======Registration======\n";
-		std::cout << "\nFirstname: ";
+		std::cout << "Firstname: ";
 		std::cin >> reg::fname;
 		std::cout << "\nLastname: ";
 		std::cin >> reg::lname;
@@ -30,28 +31,24 @@ namespace Reg
 		std::cin >> reg::status;
 
 		system("cls");
+
 		while (reg::login())
 		{
 			system("cls");
-			std::cout << "This login is already in use!\n"
-				<<"Please try again\n";
-		}
-
-		while (reg::pass())
-		{
-			system("cls");
-			std::cout << "Wrong!\n"
+			std::cout << "This username is already occupet!\n"
 				<< "Please try again\n";
 		}
 
 		system("cls");
-		std::cout << "\n\n\n\n"
-			<< "====Registration was successful!===="
-			<< "\n\n\n\n";
 
+		while (reg::password())
+		{
+			system("cls");
+			std::cout << "Couldn't confirm password!\n"
+				<< "Please try again\n";
+		}
 
-
-		reg::server();
+		reg::wr();
 
 		data::data(reg::ID);
 	}
@@ -59,98 +56,82 @@ namespace Reg
 	int reg::login()
 	{
 		std::ifstream fin;
-		std::cout << "Login:\n";
-		std::cin >> log;
+
+		std::cout << "=======Part_2=======\n"
+			<< "\nLogin: ";
+		std::cin >> reg::log;
 
 		fin.open(path1);
 		if (fin.is_open())
 		{
-			fin.seekg(0, std::ios::end);
-			if (fin.tellg() == 0)
+			while (!fin.eof())
 			{
-				reg::ID = 0;
-				return 0;
+				fin >> reg::ID >> reg::inLog >> reg::inLog;
+#ifdef DEBUG
+				_sleep(2000);
+				std::cout  << reg::ID  << " " << reg::inLog << "\n";
+#endif // DEBUG
+				if (reg::log == reg::inLog)
+					return 1;
 			}
-			else
-			{
-				while (!fin.eof())
-				{
-					fin >> reg::ID >> reg::inLog >> reg::inLog;
-
-					std::cout << reg::ID << "  " << reg::inLog << "\n";
-
-					if (sizeof(reg::inLog) != sizeof(reg::log))
-					{
-						std::cout << "\nRight\n";
-						continue;
-					}
-					else
-					{
-						for (int i = 0; i < (sizeof(reg::log) / 8 - 1); i++)
-						{
-							if (reg::inLog[i] == reg::log[i])
-								if (i == sizeof(reg::log) / 8 - 2)
-									return 1;
-							else
-								break;
-						}
-					}
-				}
-			}
-
+			return 0;
 		}
 		else
 		{
-			std::cout << "ERROR: problem with file!\n"
-				<< reg::path1 << std::endl;
+			std::cout << "\n------!there was problem with the file!------\n"
+			<< path1 << std::endl;
 			exit(1);
 		}
-		
+		fin.close();
+
+
 		return 0;
 	}
 
-	int reg::pass()
+	int reg::password()
 	{
-		std::cout << "\nPassword: ";
-		std::cin >> reg::password;
-
-		std::cout << "\nConfirm it: ";
-		std::cin >> reg::tamp;
-
-		if (sizeof(reg::password) != sizeof(reg::tamp))
-			return 1;
-		else
-		{
-			for (int i = 0; i < sizeof(reg::password) / 8 - 2; i++)
-				if (reg::password[i] != reg::tamp[i])
-					return 1;
+		std::cout << "=======Part_2=======\n"
+			<< "\nPassword: ";
+		std::cin >> reg::pass;
+		std::cout << "Confirm your password: ";
+		std::cin >> reg::confPass;
+		if (reg::pass == reg::confPass)
 			return 0;
-		}
+		return 1;
 	}
 
-	void reg::server()
+	void reg::wr()
 	{
-		std::ofstream fout;
-		fout.open(reg::path1, std::ofstream::app);
-		if(fout.is_open())
-			fout << ++reg::ID << " " << reg::password << " " << reg::log << "\n";
-		else
+		std::ofstream fout1;
+		fout1.open(reg::path1, std::ofstream::app);
+
+		std::ofstream fout2;
+		fout2.open(reg::path2, std::ofstream::app);
+
+		if (!fout1.is_open())
 		{
-			std::cout << "ERROR: problem with file!\n"
+			std::cout << "\n------!there was problem with the file!------\n"
 				<< reg::path1 << std::endl;
 			exit(1);
 		}
-		fout.close();
-
-		fout.open(reg::path2, std::ofstream::app);
-		if(fout.is_open())
-			fout << reg::ID << " " << reg::fname << " " << reg::lname << " " << reg::year << " " << reg::sex << " " << reg::status << "\n";
 		else
 		{
-			std::cout << "ERROR: problem with file!\n"
+			reg::ID++;
+			fout1 << reg::ID << " " << reg::pass << " " << reg::log << "\n";
+		}
+		if (!fout2.is_open())
+		{
+			std::cout << "\n------!there was problem with the file!------"
 				<< reg::path2 << std::endl;
 			exit(1);
 		}
-		fout.close();
+		else
+			fout2 << reg::ID << reg::fname << " " << reg::lname << " " << reg::year << " " << reg::sex << " " << reg::status << "\n";
+
+		fout1.close();
+		fout2.close();
 	}
+
+
 }
+			

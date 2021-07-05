@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../secr/secr.h"
-#include "../secv/secv.h"
+#include "../seca/seca.h"
 
 int  main()
 {
@@ -14,15 +14,10 @@ int  main()
 	
 	std::cin >> a;
 	if (a == 1)
-	{
-		std::cout << "1\n";
 		Reg::reg::reg();
-	}
 
 	else if (a == 2)
-	{
-		std::cout << "2\n";
-	}
+		Aut::Aut();
 
 	return 0;
 }

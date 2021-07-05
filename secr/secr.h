@@ -9,16 +9,14 @@ namespace Reg
 
 	private:
 		std::string fname, lname, year, sex, status;
-		std::string inLog, log, password;
-		int ID;
-		std::string tamp;
+		std::string log, pass, confPass, inLog;
+		int ID = 0;
 
 		const std::string path1 = "../server/lpdata.txt";
 		const std::string path2 = "../server/data.txt";
-
 		void funk1();
 		int login();
-		int pass();
-		void server();
+		int password();
+		void wr();
 	};
 }

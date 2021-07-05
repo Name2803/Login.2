@@ -10,9 +10,10 @@ private:
 	std::string log, password;
 	int ID;
 	std::string tamp;
+	std::string path1 = "../server/lpdata.txt";
+	std::string path2 = "../server/data.txt";
+	
 
-	const std::string path1 = "../server/lpdata.txt";
-	const std::string path2 = "../server/data.txt";
-	void searchData(const int outID);
-	void showData();
+	void search(const int outID);
+	void anFunc();
 };

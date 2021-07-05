@@ -8,8 +8,8 @@ add_executable(${PROJECT_NAME}
 	src/main.cpp
 	secr/secr.h
 	secr/secr.cpp
-	secv/secv.h
-	secv/secv.cpp
+	seca/seca.h
+	seca/seca.cpp
 	server/data.txt
 	server/lpdata.txt
 	server/server.h
